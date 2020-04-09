@@ -69,7 +69,7 @@ CMManager *CrazyMind [[CMManager alloc] init];
 ### FileExistsAtPath
 
 ```objective-c
-if ([CM FileExistsAtPath:@"Hi.zip"]) {
+if ([CrazyMind FileExistsAtPath:@"Hi.zip"]) {
 
         NSLog(@"Found");
         
