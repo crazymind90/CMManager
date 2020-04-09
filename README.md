@@ -7,20 +7,20 @@ Most functions works on sandboxed application
 
 ### Import 
 
-```
+```objective-c
 #import "CMManager.h"
 ```
 
 
 ### How To Use
 
-```
+```objective-c
 CMManager *CrazyMind [[CMManager alloc] init];
 ```
 
 ### Download
 
-```
+```objective-c
  [CrazyMind DownloadLink:@"https:/..../CM909.png" ToPath:@"Documents" IsSandBoxed:YES];
 ```
 
@@ -28,7 +28,7 @@ CMManager *CrazyMind [[CMManager alloc] init];
 
 ### Upload 
 
-```
+```objective-c
 [CrazyMind UploadFile:@"Documents/CM909.png.zip" PHPLink:@"https://Crazy/PP.php" PHPNameValue:@"upload" IsSandBoxed:YES];
 ```
 
@@ -38,7 +38,7 @@ You Can Create, Copy, Move And Remove ..
 
 ### Copy OR Move
 
-```
+```objective-c
 [CrazyMind CopyItemAtPath:@"Library/Preferences" ToPath:@""]; // To Copy "Preferences" To HomeDirectory
 
 //OR
@@ -49,7 +49,7 @@ You Can Create, Copy, Move And Remove ..
 
 ### Create
 
-```
+```objective-c
 [CrazyMind CreateFileAtPath:@"Library/HolaLibrary"];
 ```
 
@@ -57,7 +57,7 @@ You Can Create, Copy, Move And Remove ..
 
 ### Remove
 
-```
+```objective-c
 [CrazyMind RemoveItemAtPath:@"Library/CM90.png"];
 ```
 
@@ -65,7 +65,7 @@ You Can Create, Copy, Move And Remove ..
 
 ### FileExistsAtPath
 
-```
+```objective-c
 if ([CM FileExistsAtPath:@"Hi.zip"]) {
 
         NSLog(@"Found");
