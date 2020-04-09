@@ -36,7 +36,7 @@ CMManager *CrazyMind [[CMManager alloc] init];
 
 You Can Create, Copy, Move And Remove ..
 
-### Copy
+### Copy OR Move
 
 ```
 [CrazyMind CopyItemAtPath:@"Library/Preferences" ToPath:@""]; // To Copy "Preferences" To HomeDirectory
@@ -63,8 +63,19 @@ You Can Create, Copy, Move And Remove ..
 
 
 
+### FileExistsAtPath
 
+```
+if ([CM FileExistsAtPath:@"Hi.zip"]) {
 
+        NSLog(@"Found");
+        
+    } else {
+        
+        NSLog(@"Not Found");
+        
+    }
+```
 
 
 
