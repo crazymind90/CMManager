@@ -22,6 +22,10 @@ CMManager *CrazyMind [[CMManager alloc] init];
 
 ```objective-c
  [CrazyMind DownloadLink:@"https:/..../CM909.png" ToPath:@"Documents" IsSandBoxed:YES];
+ 
+ OR 
+ 
+ [CrazyMind DownloadLink:@"https:/..../CM909.png" ToPath:@"/var/mobile" IsSandBoxed:NO];
 ```
 
 
