@@ -34,7 +34,10 @@ CMManager *CrazyMind [[CMManager alloc] init];
 
 
 
-You Can Create, Copy, Move And Remove ..
+
+### You Can Create, Copy, Move, Remove and Check If File Exist ..
+
+
 
 ### Copy OR Move
 
