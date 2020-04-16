@@ -86,6 +86,11 @@ if ([CrazyMind FileExistsAtPath:@"Hi.zip"]) {
 
 
 
+### CreatePlistAtPath
+
+```objective-c
+ [CrazyMind CreatePlistAtPath:@"/var/mobile" NameWithoutExtension:@"MyPlist" IsSandBoxed:NO];
+```
 
 
 
