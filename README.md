@@ -39,7 +39,7 @@ CMManager *CrazyMind [[CMManager alloc] init];
 
 
 
-### You Can Create, Copy, Move, Remove and Check If File Exist ..
+### You Can Create@[File,Directory,Plist], Copy, Move, Remove and Check If File Exist ..
 
 
 
