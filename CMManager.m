@@ -135,22 +135,23 @@ NSArray *Arr = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:Content
  
  
 
-+(id) Generator {
++(id) Generator:(NSUInteger)Num {
     
     NSString *alphabet  = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";
-    NSMutableString *Generator = [NSMutableString stringWithCapacity:16];
-    for (NSUInteger i = 0U; i < 16; i++) {
+    NSMutableString *Generator = [NSMutableString stringWithCapacity:Num];
+    for (NSUInteger i = 0U; i < Num; i++) {
     u_int32_t r = arc4random() % [alphabet length];
     unichar c = [alphabet characterAtIndex:r];
     [Generator appendFormat:@"%C", c];
         
     }
     
-    NSString *Crazy = [NSString stringWithFormat:@"com.crazymind90.%@",Generator];
+    NSString *Crazy = [NSString stringWithFormat:@"%@",Generator];
 
     return Crazy;
     
 }
+
 
   
 
