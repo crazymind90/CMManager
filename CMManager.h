@@ -26,7 +26,7 @@
 
 +(BOOL) CreatePlistAtPath:(NSString *)CreatePlistAtPath NameWithoutExtension:(NSString *)NameWithoutExtension;
 
-+(id) Generator;
++(id) Generator:(NSUInteger)Num;
 
 +(NSString *) PlistPath:(NSString *)PlistPath ObjectForKey:(NSString *)ObjectForKey;
 
