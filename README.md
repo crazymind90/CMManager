@@ -15,17 +15,18 @@ Most functions works on sandboxed application
 ### How To Use
 
 ```objective-c
-CMManager *CrazyMind [[CMManager alloc] init];
+[CMManager ......];
 ```
 
 ### Download
 
 ```objective-c
- [CrazyMind DownloadLink:@"https:/..../CM909.png" ToPath:@"Documents" IsSandBoxed:YES];
- 
- OR 
- 
- [CrazyMind DownloadLink:@"https:/..../CM909.png" ToPath:@"/var/mobile" IsSandBoxed:NO];
+
+// For example , you wanna download a picture to Library path 
+
+   NSString *LibraryPath = [CMManager DataPathWithFileOrDir:@"Library"];
+    
+    [CMManager DownloadLink:@"https://.....png" ToPath:LibraryPath];
 ```
 
 
@@ -33,7 +34,7 @@ CMManager *CrazyMind [[CMManager alloc] init];
 ### Upload 
 
 ```objective-c
-[CrazyMind UploadFile:@"Documents/CM909.png.zip" PHPLink:@"https://Crazy/PP.php" PHPNameValue:@"upload" IsSandBoxed:YES];
+[CMManager UploadFile:@"Documents/CM909.png.zip" PHPLink:@"https://Crazy/PP.php" PHPNameValue:@"upload"];
 ```
 
 
@@ -43,55 +44,37 @@ CMManager *CrazyMind [[CMManager alloc] init];
 
 
 
-### Copy OR Move
+### Create Plist
 
 ```objective-c
-[CrazyMind CopyItemAtPath:@"Library/Preferences" ToPath:@""]; // To Copy "Preferences" To HomeDirectory
 
-//OR
-[CrazyMind CopyItemAtPath:@"Library/Preferences" ToPath:[CM DocumentsPath:YES FullDocumentsPath:YES]]; To Copy "Preferences" To DocumentsDirectory
+ [CMManager CreatePlistAtPath:@"/var/mobile/Documents" NameWithoutExtension:@"MyPlist"];
+ 
 ```
 
 
 
-### Create
+### Set a new value to Plist , Get Value and Remove key
 
 ```objective-c
-[CrazyMind CreateFileAtPath:@"Library/HolaLibrary"];
+
+// Set a new value
+     NSString *PlistPath = @"/var/mobile/Documents/MyPlist.plist";
+    
+    [CMManager PlistPath:PlistPath SetValue:@"Hola" ForKey:@"abcd"];
+   
+// Get Value
+   NSString *GetHolaValue = [CMManager PlistPath:PlistPath ObjectForKey:@"abcd"];
+    NSLog(@"GetHolaValue = %@",GetHolaValue); // It will print "Hola"
+    
+    
+// Remove key
+    [CMManager PlistPath:PlistPath RemoveObjectForKey:@"abcd"]; // It will remove Hola
 ```
 
 
 
-### Remove
-
-```objective-c
-[CrazyMind RemoveItemAtPath:@"Library/CM90.png"];
-```
-
-
-
-### FileExistsAtPath
-
-```objective-c
-if ([CrazyMind FileExistsAtPath:@"Hi.zip"]) {
-
-        NSLog(@"Found");
-        
-    } else {
-        
-        NSLog(@"Not Found");
-        
-    }
-```
-
-
-
-### CreatePlistAtPath
-
-```objective-c
- [CrazyMind CreatePlistAtPath:@"/var/mobile" NameWithoutExtension:@"MyPlist" IsSandBoxed:NO];
-```
-
+### And other usefull functions ,
 
 
 
