@@ -88,20 +88,7 @@ Most functions works on sandboxed application
 
 
 
-
-
-
-
-### Note
-### If you want to be a developer fastly - Clone any Github project , write your name , Boom , You are officially a developer 
-
-```objective-c
- [CrazyMind Clone:@"https://github.com/anyProject"];
-```
-
-
-
-
+ 
 
 
 
