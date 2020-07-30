@@ -22,7 +22,6 @@ Most functions works on sandboxed application
 ### Download
 
 ```objective-c
-
 // For example , you wanna download a picture to Library path 
 
    NSString *LibraryPath = [CMManager DataPathWithFileOrDir:@"Library"];
@@ -33,7 +32,6 @@ Most functions works on sandboxed application
 
 
 ### Upload 
-
 ```objective-c
 [CMManager UploadFile:@"Documents/CM909.png.zip" PHPLink:@"https://Crazy/PP.php" PHPNameValue:@"upload"];
 ```
@@ -41,8 +39,7 @@ Most functions works on sandboxed application
 ### CustomUIAlertController
 
 ```objective-c
-
-  [CMManager InitAlertWithTitle:@"JDTitle" TitleColor:UIColorFromHEX(0x128890) Message:@"Cmessage" MessageColor:UIColor.greenColor Buttons:@[@"Button1",@"Button2",@"Button3"] ButtonsColor:UIColor.whiteColor ButtonsImage:[UIImage imageNamed:@"sys"] BackgroundColor:UIColorFromHEX(0x303030) AlertStyle:UIAlertControllerStyleAlert Target:self handler:^(NSString * _Nullable ButtonTitle) {
+[CMManager InitAlertWithTitle:@"JDTitle" TitleColor:UIColorFromHEX(0x128890) Message:@"Cmessage" MessageColor:UIColor.greenColor Buttons:@[@"Button1",@"Button2",@"Button3"] ButtonsColor:UIColor.whiteColor ButtonsImage:[UIImage imageNamed:@"sys"] BackgroundColor:UIColorFromHEX(0x303030) AlertStyle:UIAlertControllerStyleAlert Target:self handler:^(NSString * _Nullable ButtonTitle) {
        
         if ([ButtonTitle isEqual:@"Button1"])
         NSLog(@"Button1 it is");
@@ -52,10 +49,8 @@ Most functions works on sandboxed application
         
         if ([ButtonTitle isEqual:@"Button3"])
         NSLog(@"Button3 it is");
-                 
-             
+           
     }];
-    
     
 ```
 
@@ -68,7 +63,6 @@ UIButton *Button;
 Button = [CMManager InitButtonWithName:@"Button" LeftRight:0.34 UpDown:0.33 Width:0.30 Height:0.07 InView:self.view Target:self Action:@selector(Action:)];
 Button.layer.cornerRadius = 20;
 Button.layer.backgroundColor = UIColor.darkGrayColor.CGColor;
-    
 ```
 
 
@@ -90,7 +84,6 @@ Label.layer.backgroundColor = UIColor.cyanColor.CGColor;
 UIView *View;
 View = [CMManager InitViewWithBGColor:UIColor.darkGrayColor LeftRight:0.26 UpDown:0.60 Width:0.50 Height:0.15 InView:self.view];
 View.layer.cornerRadius = 20;
-     
 ```
 
 
@@ -101,7 +94,6 @@ View.layer.cornerRadius = 20;
 UIButton *InsButton = [CMManager InitButtonInsideViewWithName:@"Button1" LeftRight:55 UpDown:11.5 Width:0.45 Height:0.30 InView:View Target:self Action:@selector(BInside:)];
 InsButton.backgroundColor = UIColor.grayColor;
 InsButton.layer.cornerRadius = 20;
-    
 ```
 
 
@@ -114,9 +106,7 @@ InsButton.layer.cornerRadius = 20;
 ### Create Plist
 
 ```objective-c
-
  [CMManager CreatePlistAtPath:@"/var/mobile/Documents" NameWithoutExtension:@"MyPlist"];
- 
 ```
 
 
@@ -124,7 +114,6 @@ InsButton.layer.cornerRadius = 20;
 ### Set a new value to Plist , Get Value and Remove key
 
 ```objective-c
-
 // Set a new value
      NSString *PlistPath = @"/var/mobile/Documents/MyPlist.plist";
     
