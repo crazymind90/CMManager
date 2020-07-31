@@ -16,7 +16,7 @@
 @implementation CMManager
 
  
-+(void) InitAlertWithTitle:(NSString *_Nullable)Title TitleColor:(UIColor *_Nullable)TitleColor Message:(NSString *_Nullable)Message MessageColor:(UIColor *_Nullable)MessageColor Buttons:(NSArray *_Nullable)Buttons ButtonsColor:(UIColor *_Nullable)ButtonsColor ButtonsImage:(UIImage *_Nullable)ButtonsImage BackgroundColor:(UIColor *_Nullable)BackgroundColor AlertStyle:(UIAlertControllerStyle)AlertStyle Target:(id _Nullable)Target handler:(void(^_Nullable)(NSString * _Nullable ButtonTitle))handler {
++(void) InitAlertWithTitle:(NSString *_Nullable)Title TitleColor:(UIColor *_Nullable)TitleColor Message:(NSString *_Nullable)Message MessageColor:(UIColor *_Nullable)MessageColor Buttons:(NSArray *_Nullable)Buttons CancelButton:(BOOL)CancelButton ButtonsColor:(UIColor *_Nullable)ButtonsColor ButtonsImage:(UIImage *_Nullable)ButtonsImage BackgroundColor:(UIColor *_Nullable)BackgroundColor AlertStyle:(UIAlertControllerStyle)AlertStyle Target:(id _Nullable)Target handler:(void(^_Nullable)(NSString * _Nullable ButtonTitle))handler {
     
     
  
@@ -75,6 +75,7 @@
         //CancelColor
         [cancelAction setValue:UIColor.redColor forKey:@"titleTextColor"];
          
+     if (CancelButton)
         [alert addAction:cancelAction];
 
 
@@ -83,6 +84,8 @@
         
     
 }
+
+
 
 
 
