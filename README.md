@@ -1,8 +1,6 @@
 # CMManager
 
-I coded this header to make NSFileManager easy to use on SandBoxed applications for me .. But you are free to use it 
-
-Most functions works on sandboxed application 
+I coded this header to make things easy for me .. But you are free to use it 
 
 
 ### Import 
