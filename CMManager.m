@@ -15,6 +15,22 @@
 
 @implementation CMManager
 
+
+ 
++(UIImageView *_Nullable) InitImageNamed:(NSString *_Nullable)imageName LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *_Nullable)InView {
+    
+    CGRect ImFrame = CGRectMake(InView.frame.size.width*LeftRight, InView.frame.size.height*UpDown, InView.frame.size.width*Width, InView.frame.size.height*Height);
+    
+    UIImageView *ImageView = [[UIImageView alloc] initWithFrame:ImFrame];
+    
+    ImageView.image = [UIImage imageNamed:imageName];
+    
+    ImageView.layer.cornerRadius = 20;
+    
+    [InView addSubview:ImageView];
+    
+    return ImageView;
+}
  
 +(void) InitAlertWithTitle:(NSString *_Nullable)Title TitleColor:(UIColor *_Nullable)TitleColor Message:(NSString *_Nullable)Message MessageColor:(UIColor *_Nullable)MessageColor Buttons:(NSArray *_Nullable)Buttons CancelButton:(BOOL)CancelButton ButtonsColor:(UIColor *_Nullable)ButtonsColor ButtonsImage:(UIImage *_Nullable)ButtonsImage BackgroundColor:(UIColor *_Nullable)BackgroundColor AlertStyle:(UIAlertControllerStyle)AlertStyle Target:(id _Nullable)Target handler:(void(^_Nullable)(NSString * _Nullable ButtonTitle))handler {
     
@@ -87,8 +103,6 @@
 
 
 
-
-
 +(void) InitAlertWithTitle:(NSString *)Title Message:(NSString *)Message Buttons:(NSArray *)Buttons Target:(id)Target handler:(void(^_Nullable)(NSString * _Nullable ButtonTitle))handler {
 
     
@@ -119,16 +133,17 @@
 }
 
 
-+(UIButton *) InitButtonInsideViewWithName:(NSString *)BuName LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *)View Target:(id)Target Action:(SEL)Action {
++(UIButton *) InitButtonInsideViewWithName:(NSString *)BuName LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *)InView Target:(id)Target Action:(SEL)Action {
      
      
-     
-        CGRect LFrame = CGRectMake(LeftRight, UpDown, View.frame.size.width*Width, View.frame.size.height*Height);
-     
+     CGRect LFrame = CGRectMake(InView.frame.size.width*LeftRight, InView.frame.size.height*UpDown, InView.frame.size.width*Width, InView.frame.size.height*Height);
+ 
+    
         UIButton *Button = [UIButton buttonWithType:UIButtonTypeCustom];
         
         Button.frame = LFrame;
       
+        Button.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin);
 
         [Button setTitle:BuName forState:UIControlStateNormal];
 
@@ -137,7 +152,7 @@
         
         
         
-        [View addSubview:Button];
+        [InView addSubview:Button];
      
      
      return Button;
@@ -192,6 +207,7 @@
        
        Button.frame = BFrame;
      
+       Button.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin);
 
        [Button setTitle:BuName forState:UIControlStateNormal];
 
@@ -211,19 +227,15 @@
 
 +(UIView *) InitViewWithBGColor:(UIColor *)BGColor LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *)InView {
     
-    
-    float LeftNRight = [UIScreen mainScreen].bounds.size.width;
-    float UpAndDown = [UIScreen mainScreen].bounds.size.height;
-
-    float width = [UIScreen mainScreen].bounds.size.width;
-    float height = [UIScreen mainScreen].bounds.size.height;
-
-    CGRect BFrame = CGRectMake(LeftNRight*LeftRight, UpAndDown*UpDown, width*Width, height*Height);
+   
+    CGRect BFrame = CGRectMake(SCREEN_WIDTH/LeftRight, SCREEN_HEIGHT/UpDown, SCREEN_WIDTH/Width, SCREEN_HEIGHT/Height);
 
 
     UIView *View = [[UIView alloc] initWithFrame:BFrame];
 
     View.backgroundColor = BGColor;
+    
+    View.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin);
     
     [InView addSubview:View];
 
@@ -256,6 +268,8 @@
     
     Label.text = Name;
     
+    Label.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin);
+    
     Label.textAlignment = TextAlignment;
     
     [InView addSubview:Label];
@@ -280,11 +294,14 @@
 +(UILabel *) InitLabelInsideViewWithName:(NSString *)Name TextAlignment:(NSTextAlignment)TextAlignment TextColor:(UIColor *)TextColor LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *)InView {
  
     
-    CGRect LFrame = CGRectMake(LeftRight, UpDown, InView.frame.size.width*Width, InView.frame.size.height*Height);
+ 
+    CGRect LFrame = CGRectMake(InView.frame.size.width*LeftRight, InView.frame.size.height*UpDown, InView.frame.size.width*Width, InView.frame.size.height*Height);
 
     UILabel *Label = [[UILabel alloc] initWithFrame:LFrame];
     
     Label.text = Name;
+    
+    Label.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin);
     
     Label.textColor = TextColor;
     
