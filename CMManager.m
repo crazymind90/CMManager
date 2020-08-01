@@ -25,7 +25,7 @@
     
     ImageView.image = [UIImage imageNamed:imageName];
     
-    ImageView.layer.cornerRadius = 20;
+    ImageView.layer.masksToBounds = YES;
     
     [InView addSubview:ImageView];
     
