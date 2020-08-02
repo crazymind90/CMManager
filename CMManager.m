@@ -16,14 +16,95 @@
 @implementation CMManager
 
 
++(UISwitch *_Nonnull) InitSwitchInsideViewWithAction:(SEL _Nullable )Action LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *_Nullable)InView Target:(id _Nullable )Target {
+    
+        CGRect LFrame = CGRectMake(InView.frame.size.width*LeftRight, InView.frame.size.height*UpDown, InView.frame.size.width*Width, InView.frame.size.height*Height);
+    
+        UISwitch *Switch = [[UISwitch alloc] initWithFrame:LFrame];
+    
+        [Switch addTarget:Target action:Action forControlEvents:UIControlEventTouchUpInside];
  
-+(UIImageView *_Nullable) InitImageNamed:(NSString *_Nullable)imageName LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *_Nullable)InView {
+        Switch.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin);
+  
+        [InView addSubview:Switch];
+     
+     
+     return Switch;
+    
+}
+
+-(void) isSwitchON {
+    
+    NSLog(@"WTFF");
+}
+
+-(void) DDD {
+    
+     
+}
+
+
+
++(UIImage *_Nullable) BlureImage:(UIImage *)image {
+
+  UIView *ff = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+
+  UIImage *sourceImage = image;
+  UIImageView *imageView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CIImage *inputImage = [CIImage imageWithCGImage:sourceImage.CGImage];
+
+    CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
+    [filter setValue:inputImage forKey:kCIInputImageKey];
+    [filter setValue:[NSNumber numberWithFloat:20.0f] forKey:@"inputRadius"];
+    CIImage *result = [filter valueForKey:kCIOutputImageKey];
+
+
+    CGImageRef cgImage = [context createCGImage:result fromRect:[inputImage extent]];
+
+    UIImage *retVal = [UIImage imageWithCGImage:cgImage];
+
+    if (cgImage) {
+        CGImageRelease(cgImage);
+    }
+
+  imageView.image = retVal;
+  [ff addSubview:imageView];
+
+
+  UIGraphicsBeginImageContextWithOptions(ff.bounds.size, ff.opaque, 0.0);
+  [ff.layer renderInContext:UIGraphicsGetCurrentContext()];
+
+  UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
+
+  UIGraphicsEndImageContext();
+
+  return img;
+
+}
+ 
++(UIImageView *_Nullable) InitImage:(UIImage *_Nullable)image Frame:(CGRect)Frame InView:(UIView *_Nullable)InView {
+    
+ 
+      UIImageView *ImageView = [[UIImageView alloc] initWithFrame:Frame];
+    
+      ImageView.image = image;
+      
+      ImageView.layer.masksToBounds = YES;
+      
+      [InView addSubview:ImageView];
+      
+      return ImageView;
+}
+
++(UIImageView *_Nullable) InitImage:(UIImage *_Nullable)image LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *_Nullable)InView {
     
     CGRect ImFrame = CGRectMake(InView.frame.size.width*LeftRight, InView.frame.size.height*UpDown, InView.frame.size.width*Width, InView.frame.size.height*Height);
     
     UIImageView *ImageView = [[UIImageView alloc] initWithFrame:ImFrame];
-    
-    ImageView.image = [UIImage imageNamed:imageName];
+  
+    ImageView.image = image;
     
     ImageView.layer.masksToBounds = YES;
     
@@ -225,7 +306,7 @@
 
 
 
-+(UIView *) InitViewWithBGColor:(UIColor *)BGColor LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *)InView {
++(UIView *_Nullable) InitViewWithBGColor:(UIColor *_Nullable)BGColor LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height BlurEffect:(UIBlurEffect *_Nullable)BlurEffect InView:(UIView *_Nullable)InView {
     
    
     CGRect BFrame = CGRectMake(SCREEN_WIDTH/LeftRight, SCREEN_HEIGHT/UpDown, SCREEN_WIDTH/Width, SCREEN_HEIGHT/Height);
@@ -237,6 +318,14 @@
     
     View.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin);
     
+    
+    UIVisualEffect *BEffect = BlurEffect;
+
+    UIVisualEffectView *BlureView = [[UIVisualEffectView alloc] initWithEffect:BEffect];
+
+    BlureView.frame = View.bounds;
+   
+    [View addSubview:BlureView];
     [InView addSubview:View];
 
     return View;
@@ -620,4 +709,3 @@ NSArray *Arr = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:Content
 
 
 @end
-
