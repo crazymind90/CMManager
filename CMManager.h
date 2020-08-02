@@ -64,7 +64,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 +(UIButton *_Nullable) InitButtonWithName:(NSString *_Nullable)BuName LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *_Nullable)View Target:(id _Nullable)Target Action:(SEL _Nullable )Action;
 
-+(UIView *_Nullable) InitViewWithBGColor:(UIColor *_Nullable)BGColor LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *_Nullable)InView;
++(UIView *_Nullable) InitViewWithBGColor:(UIColor *_Nullable)BGColor LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height BlurEffect:(UIBlurEffect *_Nullable)BlurEffect InView:(UIView *_Nullable)InView;
 
 +(UIView *_Nullable) InitViewWithFrame:(CGRect)frame InView:(UIView *_Nullable)InView;
 
@@ -83,7 +83,15 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 +(void) InitAlertWithTitle:(NSString *_Nullable)Title TitleColor:(UIColor *_Nullable)TitleColor Message:(NSString *_Nullable)Message MessageColor:(UIColor *_Nullable)MessageColor Buttons:(NSArray *_Nullable)Buttons CancelButton:(BOOL)CancelButton ButtonsColor:(UIColor *_Nullable)ButtonsColor ButtonsImage:(UIImage *_Nullable)ButtonsImage BackgroundColor:(UIColor *_Nullable)BackgroundColor AlertStyle:(UIAlertControllerStyle)AlertStyle Target:(id _Nullable)Target handler:(void(^_Nullable)(NSString * _Nullable ButtonTitle))handler;
  
  
-+(UIImageView *_Nullable) InitImageNamed:(NSString *_Nullable)imageName LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *_Nullable)InView;
++(UIImageView *_Nullable) InitImage:(UIImage *_Nullable)image LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *_Nullable)InView;
+
++(UIImageView *_Nullable) InitImage:(UIImage *_Nullable)image Frame:(CGRect)Frame InView:(UIView *_Nullable)InView;
+
+
++(UIImage *_Nullable) BlureImage:(UIImage *_Nullable)Blure;
+
+
++(UISwitch *_Nonnull) InitSwitchInsideViewWithAction:(SEL _Nullable )Action LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *_Nullable)InView Target:(id _Nullable )Target;
 
 @end
 
