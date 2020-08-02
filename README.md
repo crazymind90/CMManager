@@ -64,6 +64,45 @@ Button.layer.backgroundColor = UIColor.darkGrayColor.CGColor;
 ```
 
 
+### Initialize a new switch 
+
+```objective-c
+
+- (void)viewDidLoad {
+
+ [CMManager InitSwitchInsideViewWithAction:@selector(SwitchState) LeftRight:0.48 UpDown:0.40 Width:1.1 Height:1.2 InView:self.view Target:self];
+ 
+ }
+ 
+-(void) SwitchState {
+    
+    if (!state) {
+    
+            NSLog(@"ON");
+    
+            state = YES;
+    
+        } else {
+    
+    
+            NSLog(@"OFF");
+    
+            state = NO;
+        }
+}
+
+```
+
+
+### Initialize a new and blured image  
+
+```objective-c
+
+  [CMManager InitImage:[CMManager BlureImage:[UIImage imageNamed:@"/path/to/image.png"]] LeftRight:0.1 UpDown:0.1 Width:0.1 Height:0.1 InView:self.view];
+
+```
+
+
 ### Initialize a new label  
 
 ```objective-c
