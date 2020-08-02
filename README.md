@@ -98,7 +98,7 @@ Button.layer.backgroundColor = UIColor.darkGrayColor.CGColor;
 
 ```objective-c
 
-  [CMManager InitImage:[CMManager BlureImage:[UIImage imageNamed:@"/path/to/image.png"]] LeftRight:0.1 UpDown:0.1 Width:0.1 Height:0.1 InView:self.view];
+ [CMManager InitImage:[CMManager BlureImage:[UIImage imageNamed:@"/path/to/image.png"] BlureLevel:94.0f] LeftRight:0.1 UpDown:0.1 Width:0.1 Height:0.1 InView:self.view];
 
 ```
 
@@ -119,7 +119,7 @@ Label.layer.backgroundColor = UIColor.cyanColor.CGColor;
 ```objective-c
 
 UIView *View;
-View = [CMManager InitViewWithBGColor:UIColor.darkGrayColor LeftRight:0.26 UpDown:0.60 Width:0.50 Height:0.15 InView:self.view];
+View = [CMManager InitViewWithBGColor:UIColorFromHEX(0x353535) LeftRight:22.7 UpDown:19.5 Width:1.1 Height:9 BackgroundImage:[CMManager BlureImage:[UIImage imageNamed:@"/path/to/image.png"] BlureLevel:94.0] InView:self.view];
 View.layer.cornerRadius = 20;
 ```
 
