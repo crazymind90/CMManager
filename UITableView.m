@@ -1,7 +1,5 @@
-
-
 UITableView *TableView;
-NSMutableArray *MutArray;
+NSArray *MutArray;
 UIColor *CellBGColor;
  
  
@@ -49,7 +47,7 @@ UIColor *CellBGColor;
 
 -(UITableView *_Nullable) InitTableViewWithObjects:(NSArray *_Nullable)Objects Frame:(CGRect)Frame BackgroundColor:(UIColor *_Nullable)BGColor SeparatorColor:(UIColor *_Nullable)SepColor InView:(UIView *_Nullable)InView delegate:(id _Nullable )delegate {
     
-       MutArray = [[NSMutableArray alloc] initWithObjects:@"FF",@"RR", nil];
+       MutArray = Objects;
 
        TableView = [[UITableView alloc] initWithFrame:Frame];
        
@@ -69,10 +67,9 @@ UIColor *CellBGColor;
 
 
 
-
--(void) StartTableView {
  
-    [self InitTableViewWithObjects:@[@"GG",@"KK"] Frame:[UIScreen mainScreen].bounds BackgroundColor:UIColorFromHEX(0x303030) SeparatorColor:UIColorFromHEX(0x303030) InView:self.view delegate:self];
+-(void) StartTableView {
     
-    }
+    [self InitTableViewWithObjects:@[@"ABC",@"DEF",@"GHi"] Frame:[UIScreen mainScreen].bounds BackgroundColor:UIColorFromHEX(0x303030) SeparatorColor:UIColorFromHEX(0x303030) InView:self.view delegate:self];
     
+}
