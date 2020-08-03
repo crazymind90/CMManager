@@ -15,6 +15,129 @@
 
 @implementation CMManager
 
+ 
+
++(void)ViewToBeAnimated:(UIView *_Nullable)views delegate:(id _Nullable)delegate StartAnimationFrom:(NSString *_Nullable)AnimationDirection Duration:(float)Duration {
+    
+    CATransition *transition = nil;
+    transition = [CATransition animation];
+    transition.duration = Duration;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionPush;
+    
+    if ([AnimationDirection isEqual:@"T"] || [AnimationDirection isEqual:@"t"])
+    transition.subtype = kCATransitionFromTop;
+    
+    if ([AnimationDirection isEqual:@"L"] || [AnimationDirection isEqual:@"l"])
+       transition.subtype = kCATransitionFromLeft;
+    
+    if ([AnimationDirection isEqual:@"R"] || [AnimationDirection isEqual:@"r"])
+       transition.subtype = kCATransitionFromRight;
+    
+    if ([AnimationDirection isEqual:@"B"] || [AnimationDirection isEqual:@"b"])
+       transition.subtype = kCATransitionFromBottom;
+    
+    transition.delegate = delegate;
+    [views.layer addAnimation:transition forKey:nil];
+    
+}
+
+
++(UIImage *) imageFromView:(UIView *)view {
+
+    UIGraphicsBeginImageContext(view.frame.size);
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    CGContextTranslateCTM(currentContext, 0, view.frame.size.height);
+
+    CGContextScaleCTM(currentContext, 1.0, -1.0);
+    [[view layer] renderInContext:currentContext];
+    UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return screenshot;
+}
+
++(id _Nullable) BlurView:(UIView *_Nullable)View {
+    
+    
+    UIView *NewBlurView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+
+    UIGraphicsBeginImageContextWithOptions(View.bounds.size, View.opaque, 0.0f);
+    [View drawViewHierarchyInRect:View.bounds afterScreenUpdates:NO];
+    UIImage *IMM = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    imageView.image = IMM;
+    
+    
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CIImage *inputImage = [CIImage imageWithCGImage:imageView.image.CGImage];
+
+    
+    CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
+    [filter setValue:inputImage forKey:kCIInputImageKey];
+    [filter setValue:[NSNumber numberWithFloat:20.0f] forKey:@"inputRadius"];
+    CIImage *result = [filter valueForKey:kCIOutputImageKey];
+
+
+    CGImageRef cgImage = [context createCGImage:result fromRect:[inputImage extent]];
+
+    UIImage *retVal = [UIImage imageWithCGImage:cgImage];
+    
+    imageView.image = retVal;
+ 
+    [NewBlurView addSubview:imageView];
+
+
+
+    UIGraphicsBeginImageContextWithOptions(NewBlurView.bounds.size, NewBlurView.opaque, 0.0);
+    [NewBlurView.layer renderInContext:UIGraphicsGetCurrentContext()];
+
+    UIImage *FinalRe = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+
+      return FinalRe;
+
+
+}
+
+
+
++(NSString *_Nonnull) CheckDeviceType {
+    size_t size = 100;
+    char *hw_machine = malloc(size);
+    int name[] = {CTL_HW,HW_MACHINE};
+    sysctl(name, 2, hw_machine, &size, NULL, 0);
+    NSString *hardware = [NSString stringWithUTF8String:hw_machine];
+    free(hw_machine);
+    
+    return hardware;
+}
+
+
++(BOOL) isIPhonexScreen {
+    
+    BOOL IPhonexScreen;
+    
+    NSString *DeviceC = [[CMManager CheckDeviceType] stringByReplacingOccurrencesOfString:@"iPhone" withString:@""];
+    NSString *DeviceV = [DeviceC stringByReplacingOccurrencesOfString:@"iPad" withString:@""];
+    
+    if ([DeviceV isEqual:@"10,3"] || [DeviceV isEqual:@"10,6"] || [DeviceV floatValue] >= 11 || [DeviceC containsString:@"iPad"]) {
+        
+        IPhonexScreen = YES;
+        
+    } else {
+    
+        IPhonexScreen = NO;
+        
+    }
+    
+    return IPhonexScreen;
+}
+
 
 +(UISwitch *_Nonnull) InitSwitchInsideViewWithAction:(SEL _Nullable )Action LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *_Nullable)InView Target:(id _Nullable )Target {
     
@@ -309,8 +432,17 @@
     
     View.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin);
     
-    View.backgroundColor = [UIColor colorWithPatternImage:BackgroundImage];
-   
+    UIImageView *IMView = [[UIImageView alloc] initWithImage:BackgroundImage];
+
+//    UIImage *Image = BackgroundImage;
+    IMView.layer.masksToBounds = YES;
+    
+//    IMView.image = BackgroundImage;
+    
+    IMView.layer.cornerRadius = 20;
+    
+    View.layer.contents = CFBridgingRelease((IMView.image.CGImage));
+       
     [InView addSubview:View];
 
     return View;
@@ -318,12 +450,20 @@
 }
 
 
-+(UIView *) InitViewWithFrame:(CGRect)frame InView:(UIView *)InView {
++(UIView *_Nullable) InitViewWithBGColor:(UIColor *_Nullable)BGColor Frame:(CGRect)Frame BackgroundImage:(UIImage *_Nullable)BackgroundImage InView:(UIView *_Nullable)InView {
+
+    UIView *View = [[UIView alloc] initWithFrame:Frame];
+
+    View.backgroundColor = BGColor;
     
-    UIView *View = [[UIView alloc] initWithFrame:frame];
+    View.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin);
     
+    UIImage *Image = BackgroundImage;
+    
+    View.layer.contents = (__bridge id _Nullable)(Image.CGImage);
+       
     [InView addSubview:View];
-    
+
     return View;
 }
 
