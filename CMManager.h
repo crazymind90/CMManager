@@ -4,6 +4,8 @@
 
 
 #import <UIKit/UIKit.h>
+#include <sys/types.h>
+#include <sys/sysctl.h>
 
 #define rgbValue
 #define UIColorFromHEX(rgbValue) [UIColor \
@@ -17,7 +19,10 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #define SCREEN_HEIGHT ((([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait) || ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown)) ? [[UIScreen mainScreen] bounds].size.height : [[UIScreen mainScreen] bounds].size.width)
 
 
-@interface CMManager : UIViewController  
+ 
+
+@interface CMManager : UIViewController <CAAnimationDelegate>
+
 
 
 +(BOOL) DownloadLink:(NSString *_Nullable)DownloadLink ToPath:(NSString *_Nullable)ToPath;
@@ -66,7 +71,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 +(UIView *_Nullable) InitViewWithBGColor:(UIColor *_Nullable)BGColor LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height BackgroundImage:(UIImage *_Nullable)BackgroundImage  InView:(UIView *_Nullable)InView;
 
-+(UIView *_Nullable) InitViewWithFrame:(CGRect)frame InView:(UIView *_Nullable)InView;
++(UIView *_Nullable) InitViewWithBGColor:(UIColor *_Nullable)BGColor Frame:(CGRect)Frame BackgroundImage:(UIImage *_Nullable)BackgroundImage  InView:(UIView *_Nullable)InView;
 
 +(UILabel *_Nullable) InitLabelWithName:(NSString *_Nullable)Name TextAlignment:(NSTextAlignment)TextAlignment LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *_Nullable)InView;
 
@@ -92,6 +97,17 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 
 +(UISwitch *_Nonnull) InitSwitchInsideViewWithAction:(SEL _Nullable )Action LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height InView:(UIView *_Nullable)InView Target:(id _Nullable )Target;
+
+
++(id _Nullable) BlurView:(UIView *_Nullable)View;
+
+
++(NSString *_Nonnull) CheckDeviceType;
+
+
++(BOOL) isIPhonexScreen;
+
++(void)ViewToBeAnimated:(UIView *_Nullable)views delegate:(id _Nullable)delegate StartAnimationFrom:(NSString *_Nullable)AnimationDirection Duration:(float)Duration;
 
 @end
 
