@@ -103,6 +103,16 @@ Button.layer.backgroundColor = UIColor.darkGrayColor.CGColor;
 ```
 
 
+### Initialize UINavigationBar  
+
+```objective-c
+
+[CMManager InitNavigationBarWithTitle:NaviTitle Frame:CGRectMake(0, 36, self.view.frame.size.width, 45) Style:UIBarStyleBlack LeftButton:UIBarButtonSystemItemCancel LeftButtonAction:@selector(CancelButton) RightButton:UIBarButtonSystemItemDone RightButtonAction:@selector(DoneButton) InView:self.view Target:self];
+
+
+```
+
+
 ### Initialize a new label  
 
 ```objective-c
