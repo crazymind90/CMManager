@@ -53,7 +53,10 @@
     UITabBarItem *Item1 = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemBookmarks tag:0];
     UITabBarItem *Item2 = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemContacts tag:1];
     UITabBarItem *Item3 = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemHistory tag:2];
-//  UITabBarItem *Item4 = [[UITabBarItem alloc] initWithTitle:@"ABC" image:[UIImage imageNamed:@"/var/abc.png"] tag:0];
+    
+    // Set image
+    UITabBarItem *Item4 = [[UITabBarItem alloc] initWithTitle:@"ABC" image:nil tag:0];
+    [Item1 setImage:[[UIImage imageNamed:@"sys"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
 
     [BarItems addObject:Item1];
     [BarItems addObject:Item2];
