@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name         = 'CMManager'
   s.version      = '2.0'
-  s.summary      = ""
+  s.summary      = "I coded this header to make things easy for me .. But you are free to use it"
   s.homepage         = "https://github.com/crazymind90/CMManager"
   s.license          = 'GPL'
   s.authors          = { "CrazyMind" => "CrazyMind90" }
