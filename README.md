@@ -1,6 +1,7 @@
 # CMManager
 
 I coded this header to make things easier for me .. But you are free to use it 
+* Some codes aren't mine _ i fixed some of them to work properly 
 
 
 ### Import 
