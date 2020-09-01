@@ -17,6 +17,101 @@ I coded this header to make things easy for me .. But you are free to use it
 ```
  
  
+ ### PlayAudioFromURL
+
+```objective-c
+    
+    [CMManager PlayAudioFromURL:@"https://...../Audio.mp3"];
+```
+
+
+### PlayAudioFromPath
+
+```objective-c
+
+[CMManager PlayAudioAtPath:@"/var/mobile/Audio.mp3"];
+```
+
+ 
+ 
+ 
+ ### PlayVideoFromPath
+
+```objective-c
+
+ [CMManager PlayVideoAtPath:[NSURL fileURLWithPath:@"/var/mobile/Video.mp4"] InViewController:self];
+```
+
+
+
+
+
+### ShareFile,VideoOrPicOverAirDropAndOtherOptionsUsing "UIActivityViewController"
+
+```objective-c
+
+[CMManager ShareItemAtPath:@"/var/mobile/myfile.zip" InViewController:self];
+```
+
+
+
+### AddNewOptionsBesideCopyAndPasteUsing "UIMenuController"
+
+```objective-c
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+[CMManager AddNewItemWithTitle:@"CustomCopy" InView:self.view Action:@selector(Action)];
+
+   }
+   
+   
+-(void) Action {
+
+  NSLog(@"CustomCopy Pressed");
+}
+    
+```
+
+### ActivateTheFollowingCodeAfter "Timer"
+```objective-c
+
+    [CMManager ActivateTheFollowingCodeAfter:2.4 handler:^{
+       
+        NSLog(@"Will print after 2.4 seconds");
+        
+    }];
+    
+```
+
+
+### Dispatch
+```objective-c
+
+    [CMManager StartDispatch:^{
+        
+        
+    } EndDispath:^{
+        
+        
+    }];
+    
+```
+
+
+### CopyAndPaste
+```objective-c
+
+    [CMManager CopyToClipboard:@"I'm @CrazyMind90"];
+    NSString *Get = [CMManager PasteFromClipboard];
+    
+    NSLog(@"%@",Get); // Will print "I'm @CrazyMind90"
+    
+```
+
+
+
 ### Download
 
 ```objective-c
