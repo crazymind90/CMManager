@@ -189,8 +189,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 +(UIActivityViewController *_Nullable) ShareItemAtPath:(NSString *_Nullable)Path InViewController:(UIViewController *_Nullable)InViewController;
 
 
-+(NSArray *_Nullable) ExtractFromFile:(NSString *_Nullable)ExtractFromFile;
-
 
 +(void) ActivateTheFollowingCodeAfter:(float)Sleep handler:(void(^_Nullable)(void))handler;
 

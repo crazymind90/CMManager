@@ -557,28 +557,6 @@ WKWebView *Web = [[WKWebView alloc] initWithFrame:Frame];
 }
 
 
-
-+(NSArray *_Nullable) ExtractFromFile:(NSString *_Nullable)ExtractFromFile {
-
-NSString *GetString = [NSString stringWithContentsOfFile:ExtractFromFile encoding:NSUTF8StringEncoding error:nil];
-
-NSArray *LineByLine = [GetString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    
-
-    NSMutableArray *MuArray = [NSMutableArray arrayWithArray:LineByLine];
- 
-    [MuArray removeObject:@""];
-    
-    for (NSString *EachLine in LineByLine) {
-        
-    if (![EachLine containsString:@"Package:"] && ![EachLine containsString:@"dev:"])
-        [MuArray removeObject:EachLine];
-            
-    }
- 
-    return MuArray;
-
-}
  
 
 
