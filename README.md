@@ -21,7 +21,7 @@ I coded this header to make things easy for me .. But you are free to use it
 
 ```objective-c
     
-    [CMManager PlayAudioFromURL:@"https://...../Audio.mp3"];
+[CMManager PlayAudioFromURL:@"https://...../Audio.mp3"];
 ```
 
 
