@@ -2,20 +2,684 @@
 
  
 #import "CMManager.h"
+#include <spawn.h>
+ 
 
+@interface UIDevice (AppEditor)
 
-@interface UIDevice ()
-
--(id)_deviceInfoForKey:(NSString *)key;
+- (id)_deviceInfoForKey:(NSString *)key;
 
 @end
 
 
+ 
 
 
-@implementation CMManager 
+@implementation CMManager
 
  
+
++(CGRect) AboveTabBar {
+    
+    float FinalResult = 0;
+    float UpDown = 0;
+        if ([CMManager isIPadScreen_Small]) {
+      
+        NSLog(@"iPad Small Screen Detected");
+        FinalResult = SCREEN_HEIGHT/1.1 - 15;
+        UpDown = 38;
+        
+    } else if ([CMManager isIPadScreen_12_9_inch]) {
+    
+        NSLog(@"iPad 12_9_inch Screen Detected");
+        FinalResult = SCREEN_HEIGHT/1.1 + 16;
+        UpDown = 38;
+        
+    } else if ([CMManager isIPhone_XS_MAX_XR_Screen]) {
+        
+        NSLog(@"isIPhone_XS_MAX_XR_Screen");
+        FinalResult = SCREEN_HEIGHT/1.1 - 26;
+        UpDown = 38;
+    
+    } else if ([CMManager isIPhone_X_XS_Screen]) {
+        
+        NSLog(@"isIPhone_X_XS_Screen");
+        FinalResult = SCREEN_HEIGHT/1.1 - 31;
+        UpDown = 35;
+        
+    } else if ([CMManager isIPhone_7p_8p_Screen]) {
+        
+         NSLog(@"isIPhone_7p_8p_Screen");
+        FinalResult = SCREEN_HEIGHT/1.1 - 15;
+        UpDown = 20;
+        
+    } else if ([CMManager isIPhone_7_8_Screen]) {
+        
+         NSLog(@"isIPhone_7_8_Screen");
+        FinalResult = SCREEN_HEIGHT/1.1 - 20;
+        UpDown = 20;
+        
+    } else if ([CMManager isIPhone5Screen]) {
+        
+         NSLog(@"isIPhone5Screen");
+        FinalResult = SCREEN_HEIGHT/1.1 - 20;
+        UpDown = 20;
+    }
+    
+    
+    
+   return CGRectMake(0, UpDown, SCREEN_WIDTH, FinalResult);
+}
+
+
+AVAudioPlayer *AudioPL;
++(void) PlayAudioFromURL:(NSString *_Nullable)URL {
+    
+    NSURL *url = [NSURL URLWithString:URL];
+
+    NSData *data = [NSData dataWithContentsOfURL:url];
+
+    AudioPL = [[AVAudioPlayer alloc] initWithData:data error:nil];
+
+    [AudioPL play];
+    
+}
+
+
+AVAudioPlayer *Audioplayer;
++(void) PlayAudioAtPath:(NSString *_Nullable)Path {
+    
+    NSURL *SoundPath = [NSURL fileURLWithPath:Path];
+
+    Audioplayer = [[AVAudioPlayer alloc] initWithContentsOfURL:SoundPath error:nil];
+
+    [Audioplayer play];
+    
+}
+
++(UIActivityViewController *_Nullable) ShareItemAtPath:(NSString *_Nullable)Path InViewController:(UIViewController *_Nullable)InViewController {
+    
+    // To save photo or video to CameraRoll - YOU MUST ADD "NSPhotoLibraryAddUsageDescription" Key to your Info.plist as string
+    
+        NSMutableArray *Items = [NSMutableArray new];
+    
+        [Items addObject:[NSURL fileURLWithPath:Path isDirectory:NO]];
+    
+    
+        UIActivityViewController *Activity = [[UIActivityViewController alloc] initWithActivityItems:Items applicationActivities:nil];
+
+        [InViewController presentViewController:Activity animated:YES completion:^{
+      
+            
+        }];
+    
+    return Activity;
+}
+
+
+
++(void) SaveFileAtPathToCameraRoll:(NSString *_Nullable)File SuccessHandler:(void(^_Nullable)(BOOL Success))SuccessHandler ErrorHandler:(void(^_Nullable)(NSError *Error))ErrorHandler {
+    
+    
+            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                
+            [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:[NSURL fileURLWithPath:File]];
+                
+            }
+             
+            completionHandler:^(BOOL success, NSError *error) {
+           
+            if (success) {
+
+            SuccessHandler(success);
+
+            }
+
+            if (error) {
+
+            ErrorHandler(error);
+                
+            }
+         
+     }];
+}
+
+
++(void) PlayVideoAtPath:(NSURL *_Nullable)Path InViewController:(id _Nullable)ViewController {
+    
+    
+    AVPlayer *Player = [AVPlayer playerWithURL:Path];
+    
+    AVPlayerViewController *PLViewController = [AVPlayerViewController new];
+    
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    
+    PLViewController.player = Player;
+    
+    PLViewController.allowsPictureInPicturePlayback = YES;
+    
+    PLViewController.showsPlaybackControls = YES;
+    
+    PLViewController.player.allowsExternalPlayback = YES;
+    
+    Player.allowsExternalPlayback = YES;
+    
+    
+    [Player play];
+
+ 
+    
+    [ViewController presentViewController:PLViewController animated:YES completion:nil];
+    
+ 
+
+}
+
+
++(void) RenameItemAtPath:(NSString *_Nullable)Path NewName:(NSString *_Nullable)NewName {
+    
+    [[NSFileManager defaultManager] moveItemAtPath:Path toPath:[NSString stringWithFormat:@"%@/%@",[Path stringByDeletingLastPathComponent],NewName] error:nil];
+ 
+    
+}
+
+
++(void) InitTextFieldAlertInKeyWindowWithTitle:(NSString *_Nullable)Title Message:(NSString *_Nullable)Message Buttons:(NSArray *_Nullable)Buttons CancelButtonTitle:(NSString *_Nullable)CancelButtonTitle handler:(void(^_Nullable)(NSString * _Nullable ButtonTitle, NSString * _Nullable Text))handler {
+    
+    
+
+    
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:Title message:Message preferredStyle:UIAlertControllerStyleAlert];
+
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+
+
+        textField.keyboardType = UIKeyboardTypeDefault;
+        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        [textField resignFirstResponder];
+
+
+    }];
+    
+         for (NSString *EachButton in Buttons) {
+             
+        NSArray *fields = alert.textFields;
+        UITextField *getText = [fields firstObject];
+    
+        UIAlertAction *action = [UIAlertAction actionWithTitle:EachButton style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                  
+            handler(action.title,getText.text);
+    
+            
+                   }];
+            
+           
+        [alert addAction:action];
+
+    }
+    
+
+    
+    if (!(CancelButtonTitle == NULL)) {
+        
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:CancelButtonTitle  style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                                                         
+        
+    }];
+
+    
+    [alert addAction:cancelAction];
+        
+    }
+    
+
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:true completion:nil];
+    
+    
+}
+
++(void) StartDispatch:(void(^_Nullable)(void))StartDispatch {
+    
+      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+       
+              StartDispatch();
+          
+    });
+    
+    
+}
+
+
++(void) InitAlertInKeyWindowWithTitle:(NSString *_Nullable)Title Message:(NSString *_Nullable)Message Buttons:(NSArray *_Nullable)Buttons CancelButtonTitle:(NSString *_Nullable)CancelButtonTitle AlertStyle:(UIAlertControllerStyle)AlertStyle handler:(void(^_Nullable)(NSString * _Nullable ButtonTitle))handler {
+    
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:Title message:Message preferredStyle:AlertStyle];
+    
+         for (NSString *EachButton in Buttons) {
+    
+        UIAlertAction *action = [UIAlertAction actionWithTitle:EachButton style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                  
+            handler(action.title);
+            
+ 
+                   }];
+            
+           
+        [alert addAction:action];
+    }
+       
+       
+    if (!(CancelButtonTitle == NULL)) {
+        
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:CancelButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                                                         
+      
+ 
+    }];
+    
+    //CancelColor
+     [cancelAction setValue:UIColor.redColor forKey:@"titleTextColor"];
+     [alert addAction:cancelAction];
+       
+    }
+       
+
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:true completion:nil];
+       
+    
+}
+
+
+
++(NSString *_Nullable) ShortenURL:(NSString *_Nullable)URL {
+
+NSString *StartShorting = [NSString stringWithFormat:@"https://tinyurl.com/api-create.php?url=%@",URL];
+
+ NSString *Result = [NSString stringWithContentsOfURL:[NSURL URLWithString:StartShorting] encoding:NSUTF8StringEncoding error:nil];
+ 
+     
+    return Result;
+    
+}
+
+
+
++(UIMenuController *_Nullable) AddNewItemWithTitle:(NSString *_Nullable)Title InView:(UIView *_Nullable)InView Action:(SEL)Action {
+
+
+UIMenuItem *NewItem = [[UIMenuItem alloc] initWithTitle:Title action:Action];
+
+
+UIMenuController *MenuController = [UIMenuController sharedMenuController];
+
+MenuController.menuItems = [NSArray arrayWithObjects: NewItem, nil];
+ 
+CGRect bounds = InView.bounds;
+
+[MenuController setTargetRect:bounds inView:InView.superview];
+[MenuController setMenuVisible:YES animated: YES];
+
+
+    return MenuController;
+}
+
+
+
+
+
++(UIWindow *_Nullable) NewWindowWithView:(UIView *_Nullable)View {
+    
+    
+        UIWindow *WindowSeconds;
+
+        UIWindow *Window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        WindowSeconds = Window;
+        [Window makeKeyAndVisible];
+        [Window addSubview:View];
+    
+    return Window;
+    
+}
+
+
++(void) DismissView:(id _Nullable)View {
+
+    
+    [View removeFromSuperview];
+    [View setHidden:YES];
+
+}
+
+
+
+
++(UIPasteboard *_Nullable) CopyToClipboard:(id _Nullable)Copy {
+    
+      UIPasteboard *Pasteboard = [UIPasteboard generalPasteboard];
+      Pasteboard.string = Copy;
+    
+    return Pasteboard;
+}
+
++(NSString *_Nullable) PasteFromClipboard {
+    
+    NSString *Pasted;
+    
+    UIPasteboard *Pasteboard = [UIPasteboard generalPasteboard];
+    Pasted = Pasteboard.string;
+    
+    return Pasted;
+    
+}
+
++(WKWebView *_Nullable) WebWithURL:(NSString *_Nullable)URL Frame:(CGRect)Frame InView:(UIView *_Nullable)InView {
+
+ 
+WKWebView *Web = [[WKWebView alloc] initWithFrame:Frame];
+
+[Web loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:URL]]];
+
+[InView addSubview:Web];
+    
+    return Web;
+
+}
+
+
+
+ 
+
+
++(void) AnimatedDismissView:(UIView *_Nullable)View Duration:(float)Duration Y:(float)DirectionY X:(float)DirectionX handler:(void(^_Nullable)(void))handler {
+
+    
+    [UIView animateWithDuration:Duration animations:^{
+ 
+       View.frame = CGRectOffset(View.bounds, DirectionX, DirectionY);
+
+          }];
+    
+    
+    [CMManager ActivateTheFollowingCodeAfter:Duration handler:^{
+       
+        handler();
+        
+    }];
+    
+    
+}
+
++(void) StartDispatch:(void(^_Nullable)(void))StartDispatch EndDispath:(void(^_Nullable)(void))EndDispath {
+    
+    
+       dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    
+           StartDispatch();
+    
+
+           dispatch_async(dispatch_get_main_queue(), ^{
+
+
+               EndDispath();
+
+           });
+
+       });
+    
+    
+}
+
++(void) ActivateTheFollowingCodeAfter:(float)Sleep handler:(void(^_Nullable)(void))handler {
+  
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+ 
+        [NSThread sleepForTimeInterval:Sleep];
+ 
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+
+
+            handler();
+
+        });
+
+    });
+    
+
+}
+
+
++(NSString *) RunCMDWithLog:(NSString *)RunCMDWithLog {
+    
+       NSString *RunCC = [NSString stringWithFormat:@"%@",RunCMDWithLog];
+        
+        
+       NSTask *task = [[NSTask alloc] init];
+       NSMutableArray *args = [NSMutableArray array];
+       [args addObject:@"-c"];
+       [args addObject:RunCC];
+       [task setLaunchPath:@"/bin/sh"];
+       [task setArguments:args];
+       NSPipe *outputPipe = [NSPipe pipe];
+       [task setStandardInput:[NSPipe pipe]];
+       [task setStandardOutput:outputPipe];
+       [task launch];
+       [task waitUntilExit];
+
+
+ NSData *outputData = [[outputPipe fileHandleForReading] readDataToEndOfFile];
+ NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
+    
+    return outputString;
+}
+  
++(void) ResizeLayoutView:(UIView *_Nullable)View InView:(UIView *_Nullable)InView AnchorDirection:(id _Nullable)AnchorDirection Constant:(float)Constant {
+    
+    NSString *Formatter = [NSString stringWithFormat:@"%@",AnchorDirection];
+    
+    View.translatesAutoresizingMaskIntoConstraints = NO;
+
+    id AnchorDirection2;
+    if ([Formatter containsString:@"leading"]) {
+    AnchorDirection = View.leadingAnchor;
+    AnchorDirection2 = InView.leadingAnchor;
+
+    }
+    if ([Formatter containsString:@"top"]) {
+    AnchorDirection = View.topAnchor;
+    AnchorDirection2 = InView.topAnchor;
+
+    }
+    if ([Formatter containsString:@"trailing"]) {
+    AnchorDirection = View.trailingAnchor;
+    AnchorDirection2 = InView.trailingAnchor;
+
+    }
+    if ([Formatter containsString:@"bottom"]) {
+    AnchorDirection = View.bottomAnchor;
+    AnchorDirection2 = InView.bottomAnchor;
+
+    }
+    if ([Formatter containsString:@"centerY"]) {
+    AnchorDirection = View.centerYAnchor;
+    AnchorDirection2 = InView.centerYAnchor;
+
+    }
+    if ([Formatter containsString:@"centerX"]) {
+    AnchorDirection = View.centerXAnchor;
+    AnchorDirection2 = InView.centerXAnchor;
+
+    }
+    
+    [AnchorDirection constraintEqualToAnchor:AnchorDirection2 constant:Constant].active = YES;
+    
+}
+
+
+
++(void) ResizeLayoutView:(UIView *_Nullable)View InView:(UIView *_Nullable)InView LeftAnchor:(id _Nullable)LeftAnchor LeftAnchorConstant:(float)LeftAnchorConstant RightAnchor:(id _Nullable)RightAnchor RightAnchorConstant:(float)RightAnchorConstant TopAnchor:(id _Nullable)TopAnchor TopAnchorConstant:(float)TopAnchorConstant BottomAnchor:(id _Nullable)BottomAnchor BottomAnchorConstant:(float)BottomAnchorConstant {
+    
+
+    View.translatesAutoresizingMaskIntoConstraints = NO;
+    
+     
+    id LeftAnchor2;
+    id RightAnchor2;
+    id TopAnchor2;
+    id BottomAnchor2;
+    
+    
+    LeftAnchor = View.leadingAnchor;
+    LeftAnchor2 = InView.leadingAnchor;
+
+    
+    RightAnchor = View.trailingAnchor;
+    RightAnchor2 = InView.trailingAnchor;
+
+    
+    TopAnchor = View.topAnchor;
+    TopAnchor2 = InView.topAnchor;
+
+   
+    BottomAnchor = View.bottomAnchor;
+    BottomAnchor2 = InView.bottomAnchor;
+
+    
+    [LeftAnchor constraintEqualToAnchor:LeftAnchor2 constant:LeftAnchorConstant].active = YES;
+    [RightAnchor constraintEqualToAnchor:RightAnchor2 constant:RightAnchorConstant].active = YES;
+    [TopAnchor constraintEqualToAnchor:TopAnchor2 constant:TopAnchorConstant].active = YES;
+    [BottomAnchor constraintEqualToAnchor:BottomAnchor2 constant:BottomAnchorConstant].active = YES;
+    
+    
+}
+
+
+
++(NSArray *_Nullable) ExtractFromFile:(NSString *_Nullable)ExtractFromFile {
+
+NSString *GetString = [NSString stringWithContentsOfFile:ExtractFromFile encoding:NSUTF8StringEncoding error:nil];
+
+NSArray *LineByLine = [GetString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    
+
+    NSMutableArray *MuArray = [NSMutableArray arrayWithArray:LineByLine];
+ 
+    [MuArray removeObject:@""];
+    
+    for (NSString *EachLine in LineByLine) {
+        
+    if (![EachLine containsString:@"Package:"] && ![EachLine containsString:@"dev:"])
+        [MuArray removeObject:EachLine];
+            
+    }
+ 
+    return MuArray;
+
+}
+ 
+
+
++(UITextField *_Nullable) InitTextFieldWithFrame:(CGRect)Frame TextColor:(UIColor *_Nullable)TextColor BackgroundColor:(UIColor *_Nullable)BackgroundColor InView:(UIView *_Nullable)InView {
+    
+    UITextField *TextField = [[UITextField alloc] initWithFrame:Frame];
+    
+    TextField.textColor = TextColor;
+    TextField.textAlignment = NSTextAlignmentCenter; // NSTextAlignmentRight // NSTextAlignmentLeft
+    TextField.backgroundColor = BackgroundColor;
+    
+    [InView addSubview:TextField];
+    
+    return TextField;
+}
+
+
+
++(CGRect) AboveTabBarDownNavigationController {
+    
+    // FinalResult : more + more it gets Down
+    // ScreeResult : more - more it gets up
+    
+    
+    float FinalResult = 0;
+    float ScreeResult = 0;
+    
+    
+        if ([CMManager isIPadScreen_Small]) {
+      
+        NSLog(@"iPad Small Screen Detected");
+        FinalResult = SCREEN_HEIGHT/1.2 + 52;
+        ScreeResult = SCREEN_HEIGHT/11 - 23;
+        
+    } else if ([CMManager isIPadScreen_12_9_inch]) {
+    
+        NSLog(@"iPad 12_9_inch Screen Detected");
+        FinalResult = SCREEN_HEIGHT/1.2 + 83;
+        ScreeResult = SCREEN_HEIGHT/13 - 31;
+        
+    } else if ([CMManager isIPhone_XS_MAX_XR_Screen]) {
+        
+        NSLog(@"isIPhone_XS_MAX_XR_Screen");
+        FinalResult = SCREEN_HEIGHT/1.2 - 5; 
+        ScreeResult = SCREEN_HEIGHT/12 + 10;
+    
+    } else if ([CMManager isIPhone_X_XS_Screen]) {
+        
+        NSLog(@"isIPhone_X_XS_Screen");
+        FinalResult = SCREEN_HEIGHT/1.2 - 21;
+        ScreeResult = SCREEN_HEIGHT/11 + 14;
+        
+    } else if ([CMManager isIPhone_7p_8p_Screen]) {
+        
+         NSLog(@"isIPhone_7p_8p_Screen");
+        FinalResult = SCREEN_HEIGHT/1.2 + 10;
+        ScreeResult = SCREEN_HEIGHT/10 - 10;
+        
+    } else if ([CMManager isIPhone_7_8_Screen]) {
+        
+         NSLog(@"isIPhone_7_8_Screen");
+        FinalResult = SCREEN_HEIGHT/1.2 - 1;
+        ScreeResult = SCREEN_HEIGHT/10 - 3;
+        
+    } else if ([CMManager isIPhone5Screen]) {
+        
+         NSLog(@"isIPhone5Screen");
+        FinalResult = SCREEN_HEIGHT/1.2 - 18;
+        ScreeResult = SCREEN_HEIGHT/10 + 7;
+    }
+    
+    
+    
+   return CGRectMake(0, ScreeResult, SCREEN_WIDTH, FinalResult);
+}
+
+
+
+
++(UINavigationController *_Nullable) InitNavigationControllerWithTitle:(NSString *_Nullable)Title TitleColor:(UIColor *_Nullable)TitleColor RightButtonTitle:(NSString *_Nullable)RightButtonTitle RightButtonAction:(SEL _Nullable )RightButtonAction LeftButtonTitle:(NSString *_Nullable)LeftButtonTitle LeftButtonAction:(SEL _Nullable)LeftButtonAction ButtonsColor:(UIColor *_Nullable)ButtonsColor BackgroundColor:(UIColor *_Nullable)BackgroundColor Target:(id _Nullable)Target InView:(UIView *_Nullable)InView {
+    
+    
+     UIViewController *ViewCont = [UIViewController new];
+     
+     UINavigationController *NavigationCont = [[UINavigationController alloc] initWithRootViewController:ViewCont];
+
+     ViewCont.title = Title;
+     
+     [NavigationCont.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : TitleColor}]; // TitleColor
+     [NavigationCont.navigationBar setTintColor:ButtonsColor]; // Buttons Color
+     [NavigationCont.navigationBar setBarTintColor:BackgroundColor]; // Background Color
+
+
+     ViewCont.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:RightButtonTitle style:UIBarButtonItemStyleDone target:Target action:RightButtonAction];
+     ViewCont.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:LeftButtonTitle style:UIBarButtonItemStylePlain target:Target action:LeftButtonAction];
+
+     [InView addSubview:NavigationCont.view];
+    
+    return NavigationCont;
+}
+
 
 +(CGRect) InMiddleOfView:(UIView *_Nullable)View {
     
@@ -23,7 +687,7 @@
     return CGRectMake(View.frame.size.width*0.2*1.2, View.frame.size.height*0.3, View.frame.size.width*0.5, View.frame.size.height*0.2*1.2);
 }
 
-+(CGRect) AboveTabBarDownNavigation {
++(CGRect) AboveTabBarDownNavigationBar {
     
     float FinalResult = 0;
     float ScreeResult = 0;
@@ -76,8 +740,24 @@
 }
 
 
-+(void) InitTextFieldAlertWithTitle:(NSString *_Nullable)Title TitleColor:(UIColor *_Nullable)TitleColor Message:(NSString *_Nullable)Message MessageColor:(UIColor *_Nullable)MessageColor Buttons:(NSArray *_Nullable)Buttons ButtonsColor:(UIColor *_Nullable)ButtonsColor ButtonsImage:(UIImage *_Nullable)ButtonsImage BackgroundColor:(UIColor *_Nullable)BackgroundColor TextFieldBGColor:(UIColor *_Nullable)TextFieldBGColor TextFieldTextColor:(UIColor *_Nullable)TextFieldTextColor CancelButtonTitle:(NSString *_Nullable)CancelButtonTitle Target:(id _Nullable)Target handler:(void(^_Nullable)(NSString * _Nullable ButtonTitle, NSString * _Nullable Text))handler {
++(void) InitTextFieldAlertWithTitle:(NSString *_Nullable)Title TitleColor:(UIColor *_Nullable)TitleColor Message:(NSString *_Nullable)Message MessageColor:(UIColor *_Nullable)MessageColor Buttons:(NSArray *_Nullable)Buttons ButtonsColor:(UIColor *_Nullable)ButtonsColor ButtonsImage:(UIImage *_Nullable)ButtonsImage BackgroundColor:(UIColor *_Nullable)BackgroundColor TextFieldBGColor:(UIColor *_Nullable)TextFieldBGColor TextFieldTextColor:(UIColor *_Nullable)TextFieldTextColor CancelButtonTitle:(NSString *_Nullable)CancelButtonTitle handler:(void(^_Nullable)(NSString * _Nullable ButtonTitle, NSString * _Nullable Text))handler {
     
+    
+    UIWindow *Win = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+
+     
+
+       UIViewController *controller = [[UIViewController alloc] init];
+
+       
+
+       Win.rootViewController = [UIViewController new];
+
+       Win.windowLevel = UIWindowLevelAlert + 1;
+
+       Win.rootViewController = controller;
+
+
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:Title message:Message preferredStyle:UIAlertControllerStyleAlert];
 
     [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
@@ -103,6 +783,8 @@
                   
             handler(action.title,getText.text);
     
+            [Win setHidden:YES];
+      
                    }];
             
            
@@ -165,6 +847,7 @@
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:CancelButtonTitle  style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                                                          
     
+               [Win setHidden:YES];
     }];
 
     
@@ -176,7 +859,10 @@
         
     }
     
-    [Target presentViewController:alert animated:YES completion:nil];
+    
+    [Win makeKeyAndVisible];
+
+    [controller presentViewController:alert animated:true completion:nil];
 
     
     
@@ -188,7 +874,17 @@
 
 
       
-+(void) InitTextFieldAlertWithTitle:(NSString *_Nullable)Title Message:(NSString *_Nullable)Message Buttons:(NSArray *_Nullable)Buttons CancelButtonTitle:(NSString *_Nullable)CancelButtonTitle Target:(id _Nullable)Target handler:(void(^_Nullable)(NSString * _Nullable ButtonTitle, NSString * _Nullable Text))handler {
++(void) InitTextFieldAlertWithTitle:(NSString *_Nullable)Title Message:(NSString *_Nullable)Message Buttons:(NSArray *_Nullable)Buttons CancelButtonTitle:(NSString *_Nullable)CancelButtonTitle handler:(void(^_Nullable)(NSString * _Nullable ButtonTitle, NSString * _Nullable Text))handler {
+    
+    
+    UIWindow *Win = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+
+    UIViewController *controller = [[UIViewController alloc] init];
+
+    Win.rootViewController = [UIViewController new];
+    Win.windowLevel = UIWindowLevelAlert + 1;
+    Win.rootViewController = controller;
+    
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:Title message:Message preferredStyle:UIAlertControllerStyleAlert];
 
@@ -211,6 +907,8 @@
                   
             handler(action.title,getText.text);
     
+            [Win setHidden:YES];
+            
                    }];
             
            
@@ -224,7 +922,8 @@
         
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:CancelButtonTitle  style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                                                          
-    
+     [Win setHidden:YES];
+        
     }];
 
     
@@ -232,8 +931,9 @@
         
     }
     
-    [Target presentViewController:alert animated:YES completion:nil];
 
+    [Win makeKeyAndVisible];
+    [controller presentViewController:alert animated:true completion:nil];
     
     
 }
@@ -372,50 +1072,21 @@ if ([[NSFileManager defaultManager] fileExistsAtPath:Path isDirectory:&Directory
     return screenshot;
 }
 
-+(id _Nullable) BlurView:(UIView *_Nullable)View {
++(void) BlurView:(UIView *_Nullable)View {
     
     
-    UIView *NewBlurView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    UIVisualEffect *blurEffect;
+    blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+
+    UIVisualEffectView *visualEffectView;
+    visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+
+    visualEffectView.frame = View.bounds;
+    visualEffectView.layer.cornerRadius = View.layer.cornerRadius;
+    visualEffectView.layer.masksToBounds = YES;
     
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-
-    UIGraphicsBeginImageContextWithOptions(View.bounds.size, View.opaque, 0.0f);
-    [View drawViewHierarchyInRect:View.bounds afterScreenUpdates:NO];
-    UIImage *IMM = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
     
-    imageView.image = IMM;
-    
-    
-    CIContext *context = [CIContext contextWithOptions:nil];
-    CIImage *inputImage = [CIImage imageWithCGImage:imageView.image.CGImage];
-
-    
-    CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
-    [filter setValue:inputImage forKey:kCIInputImageKey];
-    [filter setValue:[NSNumber numberWithFloat:20.0f] forKey:@"inputRadius"];
-    CIImage *result = [filter valueForKey:kCIOutputImageKey];
-
-
-    CGImageRef cgImage = [context createCGImage:result fromRect:[inputImage extent]];
-
-    UIImage *retVal = [UIImage imageWithCGImage:cgImage];
-    
-    imageView.image = retVal;
- 
-    [NewBlurView addSubview:imageView];
-
-
-
-    UIGraphicsBeginImageContextWithOptions(NewBlurView.bounds.size, NewBlurView.opaque, 0.0);
-    [NewBlurView.layer renderInContext:UIGraphicsGetCurrentContext()];
-
-    UIImage *FinalRe = UIGraphicsGetImageFromCurrentImageContext();
-    
-    UIGraphicsEndImageContext();
-
-      return FinalRe;
-
+    [View addSubview:visualEffectView];
 
 }
 
@@ -560,12 +1231,12 @@ if ([[NSFileManager defaultManager] fileExistsAtPath:Path isDirectory:&Directory
  
  
 
-+(UIImage *_Nullable) BlureImage:(UIImage *_Nullable)image BlureLevel:(float)BlureLevel {
++(UIImage *_Nullable) BlureImage:(UIImage *_Nullable)image BlureLevel:(float)BlureLevel InView:(UIView *_Nullable)InView {
 
-  UIView *ff = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    UIView *ff = [[UIView alloc] initWithFrame:InView.bounds];
 
-  UIImage *sourceImage = image;
-  UIImageView *imageView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    UIImage *sourceImage = image;
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:InView.bounds];
 
     CIContext *context = [CIContext contextWithOptions:nil];
     CIImage *inputImage = [CIImage imageWithCGImage:sourceImage.CGImage];
@@ -581,21 +1252,21 @@ if ([[NSFileManager defaultManager] fileExistsAtPath:Path isDirectory:&Directory
     UIImage *retVal = [UIImage imageWithCGImage:cgImage];
 
     if (cgImage) {
-        CGImageRelease(cgImage);
+    CGImageRelease(cgImage);
     }
 
-  imageView.image = retVal;
-  [ff addSubview:imageView];
+    imageView.image = retVal;
+    [ff addSubview:imageView];
 
 
-  UIGraphicsBeginImageContextWithOptions(ff.bounds.size, ff.opaque, 0.0);
-  [ff.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIGraphicsBeginImageContextWithOptions(ff.bounds.size, ff.opaque, 0.0);
+    [ff.layer renderInContext:UIGraphicsGetCurrentContext()];
 
-  UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
 
-  UIGraphicsEndImageContext();
+    UIGraphicsEndImageContext();
 
-  return img;
+    return img;
 
 }
  
@@ -607,6 +1278,8 @@ if ([[NSFileManager defaultManager] fileExistsAtPath:Path isDirectory:&Directory
       ImageView.image = image;
       
       ImageView.layer.masksToBounds = YES;
+    
+      [CMManager BlureImage:ImageView.image BlureLevel:50.0f InView:InView];
       
       [InView addSubview:ImageView];
       
@@ -628,8 +1301,17 @@ if ([[NSFileManager defaultManager] fileExistsAtPath:Path isDirectory:&Directory
     return ImageView;
 }
  
-+(void) InitAlertWithTitle:(NSString *_Nullable)Title TitleColor:(UIColor *_Nullable)TitleColor Message:(NSString *_Nullable)Message MessageColor:(UIColor *_Nullable)MessageColor Buttons:(NSArray *_Nullable)Buttons CancelButton:(BOOL)CancelButton ButtonsColor:(UIColor *_Nullable)ButtonsColor ButtonsImage:(UIImage *_Nullable)ButtonsImage BackgroundColor:(UIColor *_Nullable)BackgroundColor AlertStyle:(UIAlertControllerStyle)AlertStyle Target:(id _Nullable)Target handler:(void(^_Nullable)(NSString * _Nullable ButtonTitle))handler {
++(void) InitAlertWithTitle:(NSString *_Nullable)Title TitleColor:(UIColor *_Nullable)TitleColor Message:(NSString *_Nullable)Message MessageColor:(UIColor *_Nullable)MessageColor Buttons:(NSArray *_Nullable)Buttons CancelButtonTitle:(NSString *_Nullable)CancelButtonTitle ButtonsColor:(UIColor *_Nullable)ButtonsColor ButtonsImage:(UIImage *_Nullable)ButtonsImage BackgroundColor:(UIColor *_Nullable)BackgroundColor AlertStyle:(UIAlertControllerStyle)AlertStyle handler:(void(^_Nullable)(NSString * _Nullable ButtonTitle))handler {
     
+       UIWindow *Win = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+ 
+       UIViewController *controller = [[UIViewController alloc] init];
+ 
+       Win.rootViewController = [UIViewController new];
+
+       Win.windowLevel = UIWindowLevelAlert + 1;
+
+       Win.rootViewController = controller;
     
  
      UIAlertController *alert = [UIAlertController alertControllerWithTitle:Title message:Message preferredStyle:AlertStyle];
@@ -640,6 +1322,8 @@ if ([[NSFileManager defaultManager] fileExistsAtPath:Path isDirectory:&Directory
                   
             handler(action.title);
     
+            [Win setHidden:YES];
+            
                    }];
             
            
@@ -650,12 +1334,23 @@ if ([[NSFileManager defaultManager] fileExistsAtPath:Path isDirectory:&Directory
         [action setValue:[ButtonsImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forKey:@"image"];
 
     }
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"  style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    
+  
+        
+    if (!(CancelButtonTitle == NULL)) {
+        
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:CancelButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                                                          
-    
+      
+          [Win setHidden:YES];
+        
     }];
-       
     
+    //CancelColor
+     [cancelAction setValue:UIColor.redColor forKey:@"titleTextColor"];
+     [alert addAction:cancelAction];
+       
+    }
        
        // BackgroundColor
        UIView *firstSubview = alert.view.subviews.firstObject;
@@ -683,24 +1378,29 @@ if ([[NSFileManager defaultManager] fileExistsAtPath:Path isDirectory:&Directory
         [alert setValue:attrStr1 forKey:@"attributedMessage"];
 
 
+     
+
+
+       [Win makeKeyAndVisible];
+       [controller presentViewController:alert animated:true completion:nil];
     
-        //CancelColor
-        [cancelAction setValue:UIColor.redColor forKey:@"titleTextColor"];
-         
-     if (CancelButton)
-        [alert addAction:cancelAction];
-
-
-        [Target presentViewController:alert animated:YES completion:nil];
-       
         
     
 }
 
 
 
-+(void) InitAlertWithTitle:(NSString *_Nullable)Title Message:(NSString *_Nullable)Message Buttons:(NSArray *_Nullable)Buttons AlertStyle:(UIAlertControllerStyle)AlertStyle Target:(id _Nullable)Target handler:(void(^_Nullable)(NSString * _Nullable ButtonTitle))handler {
++(void) InitAlertWithTitle:(NSString *_Nullable)Title Message:(NSString *_Nullable)Message Buttons:(NSArray *_Nullable)Buttons CancelButtonTitle:(NSString *_Nullable)CancelButtonTitle AlertStyle:(UIAlertControllerStyle)AlertStyle handler:(void(^_Nullable)(NSString * _Nullable ButtonTitle))handler {
 
+    
+    UIWindow *Win = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+  
+    UIViewController *controller = [[UIViewController alloc] init];
+    
+    Win.rootViewController = [UIViewController new];
+    Win.windowLevel = UIWindowLevelAlert + 1;
+    Win.rootViewController = controller;
+    
     
   UIAlertController *alert = [UIAlertController alertControllerWithTitle:Title message:Message preferredStyle:AlertStyle];
  
@@ -709,21 +1409,33 @@ if ([[NSFileManager defaultManager] fileExistsAtPath:Path isDirectory:&Directory
      UIAlertAction *action = [UIAlertAction actionWithTitle:EachButton style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                
          handler(action.title);
+         
+           [Win setHidden:YES];
  
                 }];
          
         
      [alert addAction:action];
  }
- UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"  style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                                                      
- 
- }];
-     
     
+    
+ if (!(CancelButtonTitle == NULL)) {
+     
+ UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:CancelButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                                                      
+   
+       [Win setHidden:YES];
+     
+ }];
  
- [alert addAction:cancelAction];
- [Target presentViewController:alert animated:YES completion:nil];
+ //CancelColor
+  [cancelAction setValue:UIColor.redColor forKey:@"titleTextColor"];
+  [alert addAction:cancelAction];
+    
+ }
+    
+ [Win makeKeyAndVisible];
+ [controller presentViewController:alert animated:true completion:nil];
     
      
 }
@@ -821,12 +1533,12 @@ if ([[NSFileManager defaultManager] fileExistsAtPath:Path isDirectory:&Directory
 
 
 
-+(UIView *_Nullable) InitViewWithBGColor:(UIColor *_Nullable)BGColor LeftRight:(float)LeftRight UpDown:(float)UpDown Width:(float)Width Height:(float)Height Blur:(BOOL)Blur BackgroundImage:(UIImage *_Nullable)BackgroundImage InView:(UIView *_Nullable)InView {
++(UIView *_Nullable) InitViewWithBGColor:(UIColor *_Nullable)BGColor Frame:(CGRect)Frame Blur:(BOOL)Blur BackgroundImage:(UIImage *_Nullable)BackgroundImage InView:(UIView *_Nullable)InView {
     
     
 
    
-    CGRect BFrame = CGRectMake(SCREEN_WIDTH/LeftRight, SCREEN_HEIGHT/UpDown, SCREEN_WIDTH/Width, SCREEN_HEIGHT/Height);
+    CGRect BFrame = Frame; //CGRectMake(SCREEN_WIDTH/LeftRight, SCREEN_HEIGHT/UpDown, SCREEN_WIDTH/Width, SCREEN_HEIGHT/Height);
 
 
     UIView *View = [[UIView alloc] initWithFrame:BFrame];
