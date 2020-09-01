@@ -1,6 +1,6 @@
 # CMManager
 
-I coded this header to make things easy for me .. But you are free to use it 
+I coded this header to make things easier for me .. But you are free to use it 
 
 
 ### Import 
