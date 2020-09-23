@@ -102,6 +102,7 @@ NSArray *MutArray;
         [column.headerCell setTitle:@"Header Title"];
 
         [TableView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+        [tableContainer setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
         [TableView addTableColumn:column];
         [TableView setDelegate:delegate];
         [TableView setDataSource:delegate];
