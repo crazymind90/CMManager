@@ -12,32 +12,9 @@
 
 -(void) StartTabBar {
     
-    float FinalResult = 0.0;
+   
     
-    if ([CMManager isIPadScreen_Small]) {
-      
-        NSLog(@"iPad Small Screen Detected");
-        FinalResult = SCREEN_HEIGHT - 50;
-        
-    } else if ([CMManager isIPadScreen_12_9_inch]) {
-    
-        NSLog(@"iPad 12_9_inch Screen Detected");
-        FinalResult = SCREEN_HEIGHT-70;
-    
-    } else if ([CMManager isIPhonexScreen]) {
-        
-        NSLog(@"iPhone X Screen");
-        FinalResult = SCREEN_HEIGHT-70;
-        
-    } else if ([CMManager isIPhone8Screen]) {
-        
-         NSLog(@"iPhone 8 Screen");
-        FinalResult = SCREEN_HEIGHT-49;
-        
-    }
-        
-    
-    CGRect LFrame = CGRectMake(0, FinalResult, SCREEN_WIDTH, 50);
+    CGRect LFrame = CGRectMake(0, SCREEN_HEIGHT/1.1, SCREEN_WIDTH, 50);
 
     
     UITabBar *TabBar = [[UITabBar alloc] initWithFrame:LFrame];
