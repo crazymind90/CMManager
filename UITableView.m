@@ -21,7 +21,7 @@
 
 -(void) StartTable {
     
-        [self InitTableViewWithObjects:@[@"ABC",@"DEF",@"GHi",@"JKL",@"MNO",@"PQR",@"STU",@"VWX",@"Y&Z"] Frame:[UIScreen mainScreen].bounds BackgroundColor:UIColorFromHEX(0x202020) SeparatorColor:UIColorFromHEX(0x505050) InView:self.view delegate:self];
+   TableView = [self InitTableViewWithObjects:@[@"ABC",@"DEF",@"GHi",@"JKL",@"MNO",@"PQR",@"STU",@"VWX",@"Y&Z"] Frame:[UIScreen mainScreen].bounds BackgroundColor:UIColorFromHEX(0x202020) SeparatorColor:UIColorFromHEX(0x505050) InView:self.view delegate:self];
 }
 
 -(void) Navigation {
