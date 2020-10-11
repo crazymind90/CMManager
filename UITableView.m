@@ -1,37 +1,61 @@
-#import "TableController.h"
+#import "ViewController.h"
 #import "CMManager.h"
 
-@interface TableController () <UITableViewDelegate, UITableViewDataSource>
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
-@implementation TableController
+@implementation ViewController
+
+  
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
-
-    [self StartTable];
+  
     [self Navigation];
-    
+    [self StartTable];
 
+    
+    // Do any additional setup after loading the view.
 }
 
+ 
+UINavigationController *navigations;
 
 -(void) StartTable {
     
-   TableView = [self InitTableViewWithObjects:@[@"ABC",@"DEF",@"GHi",@"JKL",@"MNO",@"PQR",@"STU",@"VWX",@"Y&Z"] Frame:[UIScreen mainScreen].bounds BackgroundColor:UIColorFromHEX(0x202020) SeparatorColor:UIColorFromHEX(0x505050) InView:self.view delegate:self];
+    TableView = [self InitTableViewWithObjects:@[@"ABC",@"DEF",@"GHi",@"JKL",@"MNO",@"PQR",@"STU",@"VWX",@"Y&Z"] Frame:CGRectNull BackgroundColor:UIColorFromHEX(0x222222) SeparatorColor:UIColorFromHEX(0x505050) InView:self.view delegate:self];
+    
+    [TableView setTranslatesAutoresizingMaskIntoConstraints:false];
+
+    [NSLayoutConstraint activateConstraints:@[
+        
+    [TableView.topAnchor constraintEqualToAnchor:navigations.view.topAnchor constant:navigations.view.bounds.size.height/10.2],
+    [TableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+    [TableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+    [TableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
+    
+    ]];
 }
 
 -(void) Navigation {
     
-    self.navigationItem.title = @"Main.TableView";
-    UIBarButtonItem *Dismiss = [[UIBarButtonItem alloc] initWithTitle:@"Options" style:UIBarButtonItemStylePlain target:self action:@selector(Options)];
-    self.navigationItem.leftBarButtonItem = Dismiss;
-    [self.navigationController.navigationBar setBarTintColor:UIColorFromHEX(0x010101)];
+    
+    navigations = [CMManager InitNavigationControllerWithTitle:@"Hola" TitleColor:UIColor.whiteColor RightButtonItem:UIBarButtonSystemItemAdd RightButtonAction:@selector(R) LeftButtonTitle:@"Optioins" LeftButtonAction:@selector(L) ButtonsColor:nil BackgroundColor:UIColorFromHEX(0x121212) Target:self InView:self.view];
+    
+ 
 }
 
+-(void) R {
+    
+    NSLog(@"Add Button tapped");
+}
+
+-(void) L {
+    
+    NSLog(@"Options Button tapped");
+}
 
 -(void) Options {
     
@@ -77,7 +101,7 @@ NSArray *MutArray;
     if (Cell == nil)
     Cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellID];
  
-    Cell.backgroundColor = UIColorFromHEX(0x323232);
+    Cell.backgroundColor = UIColorFromHEX(0x303030);
         
     Cell.imageView.image = [UIImage imageNamed:@"sys"];
   
@@ -123,11 +147,9 @@ NSArray *MutArray;
      -(void) SwitchState {
          
          if (!isON) {
-
          NSLog(@"ON");
          isON = YES;
          } else {
-
          NSLog(@"OFF");
          isON = NO;
          }
@@ -176,7 +198,5 @@ return 53;
 
 
 
- 
 
 @end
-
