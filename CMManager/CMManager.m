@@ -145,6 +145,32 @@ AVAudioPlayer *Audioplayer;
 }
 
 
++(UINavigationController *_Nullable) InitNavigationControllerWithTitle:(NSString *_Nullable)Title TitleColor:(UIColor *_Nullable)TitleColor RightButtonItem:(UIBarButtonSystemItem)RightButtonItem RightButtonAction:(SEL _Nullable )RightButtonAction LeftButtonTitle:(NSString *_Nullable)LeftButtonTitle LeftButtonAction:(SEL _Nullable)LeftButtonAction ButtonsColor:(UIColor *_Nullable)ButtonsColor BackgroundColor:(UIColor *_Nullable)BackgroundColor Target:(id _Nullable)Target InView:(UIView *_Nullable)InView {
+    
+    
+     UIViewController *ViewCont = [UIViewController new];
+     
+     UINavigationController *NavigationCont = [[UINavigationController alloc] initWithRootViewController:ViewCont];
+
+     ViewCont.title = Title;
+     
+     [NavigationCont.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : TitleColor}]; // TitleColor
+     [NavigationCont.navigationBar setTintColor:ButtonsColor]; // Buttons Color
+     [NavigationCont.navigationBar setBarTintColor:BackgroundColor]; // Background Color
+
+     ViewCont.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:RightButtonItem target:Target action:RightButtonAction];
+    
+     ViewCont.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:LeftButtonTitle style:UIBarButtonItemStylePlain target:Target action:LeftButtonAction];
+    
+
+    
+     [InView addSubview:NavigationCont.view];
+    
+    return NavigationCont;
+}
+
+
+
 +(void) PlayVideoAtPath:(NSURL *_Nullable)Path InViewController:(id _Nullable)ViewController {
     
     
