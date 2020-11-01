@@ -400,18 +400,6 @@ CGRect bounds = InView.bounds;
     
 }
 
-+(WKWebView *_Nullable) WebWithURL:(NSString *_Nullable)URL Frame:(CGRect)Frame InView:(UIView *_Nullable)InView {
-
- 
-WKWebView *Web = [[WKWebView alloc] initWithFrame:Frame];
-
-[Web loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:URL]]];
-
-[InView addSubview:Web];
-    
-    return Web;
-
-}
 
 
 
