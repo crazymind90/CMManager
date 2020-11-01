@@ -6,7 +6,6 @@
 #import <UIKit/UIKit.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
-#import <WebKit/WebKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <AVKit/AVKit.h>
 #import <Photos/Photos.h>
@@ -200,9 +199,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 +(void) AnimatedDismissView:(UIView *_Nullable)View Duration:(float)Duration Y:(float)DirectionY X:(float)DirectionX handler:(void(^_Nullable)(void))handler;
 
-
-
-+(WKWebView *_Nullable) WebWithURL:(NSString *_Nullable)URL Frame:(CGRect)Frame InView:(UIView *_Nullable)InView;
 
 
 +(UIPasteboard *_Nullable) CopyToClipboard:(id _Nullable)Copy;
