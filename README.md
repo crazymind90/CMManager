@@ -153,10 +153,10 @@ I coded this header to make things easier for me .. But you are free to use it
 
 ```objective-c
 
-        UIButton *Button;
-        Button = [CMManager InitButtonWithName:@"Button" Frame:CGRectMake(20, 20, 100, 100) InView:self.view Target:self Action:@selector(Action)];
-        Button.layer.cornerRadius = 20;
-        Button.layer.backgroundColor = UIColor.darkGrayColor.CGColor;
+UIButton *Button;
+Button = [CMManager InitButtonWithName:@"Button" Frame:CGRectMake(20, 20, 100, 100) InView:self.view Target:self Action:@selector(Action)];
+Button.layer.cornerRadius = 20;
+Button.layer.backgroundColor = UIColor.darkGrayColor.CGColor;
 ```
 
 
