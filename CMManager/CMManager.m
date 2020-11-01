@@ -986,8 +986,10 @@ WKWebView *Web = [[WKWebView alloc] initWithFrame:Frame];
 
 BOOL Directory = NO;
     
-if ([[NSFileManager defaultManager] fileExistsAtPath:Path isDirectory:&Directory] && Directory)
+if ([[NSFileManager defaultManager] fileExistsAtPath:Path isDirectory:&Directory] && Directory) {
+ 
     Directory = YES;
+}
     
     return Directory;
 }
