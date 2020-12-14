@@ -96,9 +96,9 @@ NSArray *MutArray;
     
     static NSString *CellID = @"Cell";
 
-    UITableViewCell *Cell = [tableView dequeueReusableCellWithIdentifier:CellID];
+    UITableViewCell *Cell;//= [tableView dequeueReusableCellWithIdentifier:CellID];
     
-    if (Cell == nil)
+    //if (Cell == nil)
     Cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellID];
  
     Cell.backgroundColor = UIColorFromHEX(0x303030);
