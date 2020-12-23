@@ -99,15 +99,28 @@ NSArray *MutArray;
     UITableViewCell *Cell;//= [tableView dequeueReusableCellWithIdentifier:CellID];
     
     //if (Cell == nil)
-    Cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellID];
+    Cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellID];
  
     Cell.backgroundColor = UIColorFromHEX(0x303030);
         
-    Cell.imageView.image = [UIImage imageNamed:@"sys"];
+    Cell.imageView.image = [UIImage imageNamed:@"R"];
   
-    Cell.textLabel.text = MutArray[indexPath.row];
+    Cell.textLabel.text = MutArray_T[indexPath.row];
     
+    Cell.textLabel.numberOfLines = 0;
     
+    Cell.detailTextLabel.numberOfLines = 0;
+
+    Cell.imageView.layer.cornerRadius = 10;
+    Cell.imageView.clipsToBounds = YES;
+    
+    CGSize itemSize = CGSizeMake(65, 65);
+    
+    UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+    CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+    [Cell.imageView.image drawInRect:imageRect];
+    Cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
     
     
     
