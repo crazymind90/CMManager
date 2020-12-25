@@ -105,7 +105,7 @@ NSArray *MutArray;
         
     Cell.imageView.image = [UIImage imageNamed:@"R"];
   
-    Cell.textLabel.text = MutArray_T[indexPath.row];
+    Cell.textLabel.text = MutArray[indexPath.row];
     
     Cell.textLabel.numberOfLines = 0;
     
