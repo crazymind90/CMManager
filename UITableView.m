@@ -13,7 +13,6 @@
     [super viewDidLoad];
     
   
-    [self Navigation];
     [self StartTable];
 
     
@@ -21,17 +20,16 @@
 }
 
  
-UINavigationController *navigations;
-
+ 
 -(void) StartTable {
     
-    TableView = [self InitTableViewWithObjects:@[@"ABC",@"DEF",@"GHi",@"JKL",@"MNO",@"PQR",@"STU",@"VWX",@"Y&Z"] Frame:CGRectNull BackgroundColor:UIColorFromHEX(0x222222) SeparatorColor:UIColorFromHEX(0x505050) InView:self.view delegate:self];
+    TableView = [self InitTableViewWithObjects:@[@"ABC",@"DEF",@"GHi",@"JKL",@"MNO",@"PQR",@"STU",@"VWX",@"Y&Z"] Frame:CGRectNull BackgroundColor:UIColorFromHEX(0x080808) SeparatorColor:UIColorFromHEX(0x505050) InView:self.view delegate:self];
     
     [TableView setTranslatesAutoresizingMaskIntoConstraints:false];
 
     [NSLayoutConstraint activateConstraints:@[
         
-    [TableView.topAnchor constraintEqualToAnchor:navigations.view.topAnchor constant:navigations.view.bounds.size.height/10.2],
+    [TableView.topAnchor constraintEqualToAnchor::self.view.topAnchor],
     [TableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
     [TableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
     [TableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
@@ -39,28 +37,7 @@ UINavigationController *navigations;
     ]];
 }
 
--(void) Navigation {
-    
-    
-    navigations = [CMManager InitNavigationControllerWithTitle:@"Hola" TitleColor:UIColor.whiteColor RightButtonItem:UIBarButtonSystemItemAdd RightButtonAction:@selector(R) LeftButtonTitle:@"Optioins" LeftButtonAction:@selector(L) ButtonsColor:nil BackgroundColor:UIColorFromHEX(0x121212) Target:self InView:self.view];
-    
  
-}
-
--(void) R {
-    
-    NSLog(@"Add Button tapped");
-}
-
--(void) L {
-    
-    NSLog(@"Options Button tapped");
-}
-
--(void) Options {
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
 
 
 UITableView *TableView;
@@ -101,13 +78,15 @@ NSArray *MutArray;
     //if (Cell == nil)
     Cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellID];
  
-    Cell.backgroundColor = UIColorFromHEX(0x303030);
+    Cell.backgroundColor = UIColorFromHEX(0x161616);
         
     Cell.imageView.image = [UIImage imageNamed:@"R"];
   
     Cell.textLabel.text = MutArray[indexPath.row];
     
     Cell.textLabel.numberOfLines = 0;
+  
+    Cell.textLabel.textColor = UIColor.whiteColor;
     
     Cell.detailTextLabel.numberOfLines = 0;
 
