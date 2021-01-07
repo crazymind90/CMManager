@@ -29,7 +29,7 @@
 
     [NSLayoutConstraint activateConstraints:@[
         
-    [TableView.topAnchor constraintEqualToAnchor::self.view.topAnchor],
+    [TableView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
     [TableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
     [TableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
     [TableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
@@ -84,6 +84,8 @@ NSArray *MutArray;
   
     Cell.textLabel.text = MutArray[indexPath.row];
     
+    Cell.textLabel.textColor = UIColorFromHEX(0xFFFFFF);
+
     Cell.textLabel.numberOfLines = 0;
   
     Cell.textLabel.textColor = UIColor.whiteColor;
