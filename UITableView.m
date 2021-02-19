@@ -87,9 +87,7 @@ NSArray *MutArray;
     Cell.textLabel.textColor = UIColorFromHEX(0xFFFFFF);
 
     Cell.textLabel.numberOfLines = 0;
-  
-    Cell.textLabel.textColor = UIColor.whiteColor;
-    
+      
     Cell.detailTextLabel.numberOfLines = 0;
 
     Cell.imageView.layer.cornerRadius = 10;
