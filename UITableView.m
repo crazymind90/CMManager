@@ -52,8 +52,7 @@ NSArray *MutArray;
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-   NSIndexPath *Path = TableView.indexPathForSelectedRow;
-   NSString *SelectedRow = MutArray[Path.row];
+   NSString *SelectedRow = MutArray[indexPath.row];
     
     NSLog(@"%@",SelectedRow);
     
